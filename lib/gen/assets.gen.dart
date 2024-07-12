@@ -16,11 +16,27 @@ class $ScriptsGen {
   /// File path: scripts/Blood Brothers.txt
   String get bloodBrothers => 'scripts/Blood Brothers.txt';
 
+  /// File path: scripts/Curious Ed.txt
+  String get curiousEd => 'scripts/Curious Ed.txt';
+
+  /// File path: scripts/Curious Judy.txt
+  String get curiousJudy => 'scripts/Curious Judy.txt';
+
+  /// File path: scripts/King Arthus.txt
+  String get kingArthus => 'scripts/King Arthus.txt';
+
   /// File path: scripts/Speech and Debate.txt
   String get speechAndDebate => 'scripts/Speech and Debate.txt';
 
   /// List of all assets
-  List<String> get values => [aDollsHouse, bloodBrothers, speechAndDebate];
+  List<String> get values => [
+        aDollsHouse,
+        bloodBrothers,
+        curiousEd,
+        curiousJudy,
+        kingArthus,
+        speechAndDebate
+      ];
 }
 
 class Assets {
