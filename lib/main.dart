@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(final BuildContext context) {
     RendererBinding.instance.ensureSemantics();
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Hourglass Scripts',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
