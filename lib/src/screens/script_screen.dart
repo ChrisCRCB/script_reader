@@ -62,26 +62,26 @@ class ScriptScreenState extends State<ScriptScreen> {
       body: OrientationBuilder(
         builder: (final context, final orientation) {
           final buttons = <Widget>[
-            ElevatedButton(
+            IconButton(
               onPressed: index == 0 ? null : () => setState(() => index--),
-              child: const Icon(
+              icon: const Icon(
                 Icons.skip_previous_outlined,
                 semanticLabel: 'Previous line',
               ),
             ),
-            ElevatedButton(
+            IconButton(
               onPressed: () => speak(line),
-              child: const Icon(
+              icon: const Icon(
                 Icons.play_circle_outline,
                 semanticLabel: 'Replay',
               ),
             ),
-            ElevatedButton(
+            IconButton(
               autofocus: true,
               onPressed: index >= (widget.lines.length - 1)
                   ? null
                   : () => setState(() => index++),
-              child: const Icon(
+              icon: const Icon(
                 Icons.skip_next_outlined,
                 semanticLabel: 'Next line',
               ),
