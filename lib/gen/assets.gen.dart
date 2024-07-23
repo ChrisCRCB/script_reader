@@ -13,6 +13,9 @@ class $ScriptsGen {
   /// File path: scripts/A Dolls House.txt
   String get aDollsHouse => 'scripts/A Dolls House.txt';
 
+  /// File path: scripts/A Little Box Of Oblivion.txt
+  String get aLittleBoxOfOblivion => 'scripts/A Little Box Of Oblivion.txt';
+
   /// File path: scripts/Blood Brothers.txt
   String get bloodBrothers => 'scripts/Blood Brothers.txt';
 
@@ -22,20 +25,41 @@ class $ScriptsGen {
   /// File path: scripts/Curious Judy.txt
   String get curiousJudy => 'scripts/Curious Judy.txt';
 
+  /// File path: scripts/Honeymoon Suite.txt
+  String get honeymoonSuite => 'scripts/Honeymoon Suite.txt';
+
+  /// File path: scripts/Jail Birds.txt
+  String get jailBirds => 'scripts/Jail Birds.txt';
+
   /// File path: scripts/King Arthus.txt
   String get kingArthus => 'scripts/King Arthus.txt';
+
+  /// File path: scripts/Lyrics - Run.txt
+  String get lyricsRun => 'scripts/Lyrics - Run.txt';
+
+  /// File path: scripts/Run Lyrics.txt
+  String get runLyrics => 'scripts/Run Lyrics.txt';
 
   /// File path: scripts/Speech and Debate.txt
   String get speechAndDebate => 'scripts/Speech and Debate.txt';
 
+  /// File path: scripts/The Audition Scene.txt
+  String get theAuditionScene => 'scripts/The Audition Scene.txt';
+
   /// List of all assets
   List<String> get values => [
         aDollsHouse,
+        aLittleBoxOfOblivion,
         bloodBrothers,
         curiousEd,
         curiousJudy,
+        honeymoonSuite,
+        jailBirds,
         kingArthus,
-        speechAndDebate
+        lyricsRun,
+        runLyrics,
+        speechAndDebate,
+        theAuditionScene
       ];
 }
 
