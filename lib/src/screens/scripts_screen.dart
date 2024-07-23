@@ -37,7 +37,7 @@ class ScriptsScreen extends StatelessWidget {
               );
               final lines = text
                   .split('\n')
-                  .where((final line) => line.isNotEmpty)
+                  .where((final line) => line.trim().isNotEmpty)
                   .toList();
               if (context.mounted) {
                 await Navigator.push(
