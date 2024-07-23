@@ -36,6 +36,7 @@ class ScriptsScreen extends StatelessWidget {
                 name,
               );
               final lines = text
+                  .replaceAll('\r', '\n')
                   .split('\n')
                   .where((final line) => line.trim().isNotEmpty)
                   .toList();
