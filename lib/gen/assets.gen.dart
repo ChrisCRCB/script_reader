@@ -34,11 +34,11 @@ class $ScriptsGen {
   /// File path: scripts/King Arthus.txt
   String get kingArthus => 'scripts/King Arthus.txt';
 
+  /// File path: scripts/Lyrics - Roses Of Success.txt
+  String get lyricsRosesOfSuccess => 'scripts/Lyrics - Roses Of Success.txt';
+
   /// File path: scripts/Lyrics - Run.txt
   String get lyricsRun => 'scripts/Lyrics - Run.txt';
-
-  /// File path: scripts/Run Lyrics.txt
-  String get runLyrics => 'scripts/Run Lyrics.txt';
 
   /// File path: scripts/Speech and Debate.txt
   String get speechAndDebate => 'scripts/Speech and Debate.txt';
@@ -56,8 +56,8 @@ class $ScriptsGen {
         honeymoonSuite,
         jailBirds,
         kingArthus,
+        lyricsRosesOfSuccess,
         lyricsRun,
-        runLyrics,
         speechAndDebate,
         theAuditionScene
       ];
