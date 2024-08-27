@@ -16,6 +16,9 @@ class $ScriptsGen {
   /// File path: scripts/A Little Box Of Oblivion.txt
   String get aLittleBoxOfOblivion => 'scripts/A Little Box Of Oblivion.txt';
 
+  /// File path: scripts/Angels In America.txt
+  String get angelsInAmerica => 'scripts/Angels In America.txt';
+
   /// File path: scripts/Blood Brothers.txt
   String get bloodBrothers => 'scripts/Blood Brothers.txt';
 
@@ -50,6 +53,7 @@ class $ScriptsGen {
   List<String> get values => [
         aDollsHouse,
         aLittleBoxOfOblivion,
+        angelsInAmerica,
         bloodBrothers,
         curiousEd,
         curiousJudy,
