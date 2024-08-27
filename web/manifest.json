@@ -1,6 +1,6 @@
 {
-    "name": "script_reader",
-    "short_name": "script_reader",
+    "name": "Hourglass Scripts",
+    "short_name": "scripts",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
