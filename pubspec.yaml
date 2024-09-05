@@ -1,21 +1,22 @@
 name: script_reader
 description: "An app to aid in learning scripts."
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.5.0-180.3.beta <4.0.0'
+  sdk: ">=3.5.0-180.3.beta <4.0.0"
 
 dependencies:
   auto_size_text: ^3.0.0
-  backstreets_widgets: ^0.13.0
+  backstreets_widgets: ^0.15.0
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
   flutter_tts: ^4.0.2
   path: ^1.9.0
   recase: ^4.1.0
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_lints: ^4.0.0

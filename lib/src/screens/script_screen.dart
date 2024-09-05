@@ -2,6 +2,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:backstreets_widgets/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+/// The key for the automatically read preference.
+const automaticallyReadKey = 'script_reader_automatically_read';
 
 /// A screen to show a single script.
 class ScriptScreen extends StatefulWidget {
@@ -25,6 +29,9 @@ class ScriptScreen extends StatefulWidget {
 
 /// State for [ScriptScreen].
 class ScriptScreenState extends State<ScriptScreen> {
+  /// Whether new lines should automatically be read.
+  bool? _automaticallyRead;
+
   /// The TTS to use.
   late final FlutterTts tts;
 
@@ -55,45 +62,77 @@ class ScriptScreenState extends State<ScriptScreen> {
   /// Build a widget.
   @override
   Widget build(final BuildContext context) {
+    final automaticallyRead = _automaticallyRead;
+    if (automaticallyRead == null) {
+      loadPreferences();
+      return const LoadingScreen();
+    }
     final line = widget.lines[index];
-    speak(line);
+    if (automaticallyRead == true) {
+      speak(line);
+    } else {
+      tts.stop();
+    }
+    final buttons = <Widget>[
+      IconButton(
+        onPressed: index == 0 ? null : () => setState(() => index--),
+        icon: const Icon(
+          Icons.skip_previous_outlined,
+          semanticLabel: 'Previous line',
+        ),
+      ),
+      IconButton(
+        onPressed: () => speak(line),
+        icon: const Icon(
+          Icons.play_circle_outline,
+          semanticLabel: 'Replay',
+        ),
+      ),
+      IconButton(
+        autofocus: true,
+        onPressed: index >= (widget.lines.length - 1)
+            ? null
+            : () => setState(() => index++),
+        icon: const Icon(
+          Icons.skip_next_outlined,
+          semanticLabel: 'Next line',
+        ),
+      ),
+    ];
+    final textWidget = Semantics(
+      liveRegion: !automaticallyRead,
+      child: AutoSizeText(
+        line,
+        style: const TextStyle(
+          fontSize: 20.0,
+        ),
+        overflow: TextOverflow.visible,
+      ),
+    );
+    final automaticallyReadLabel = automaticallyRead == true
+        ? 'Disable automatic reading'
+        : 'Enable automatic reading';
     return SimpleScaffold(
+      actions: [
+        Row(
+          children: [
+            Text(automaticallyReadLabel),
+            Checkbox(
+              value: automaticallyRead,
+              onChanged: (final value) async {
+                _automaticallyRead = value ?? false;
+                final preferences = await SharedPreferences.getInstance();
+                await preferences.setBool(automaticallyReadKey, value ?? false);
+                setState(() {});
+              },
+              semanticLabel: automaticallyReadLabel,
+            ),
+          ],
+        ),
+      ],
       title: widget.title,
       body: OrientationBuilder(
         builder: (final context, final orientation) {
-          final buttons = <Widget>[
-            IconButton(
-              onPressed: index == 0 ? null : () => setState(() => index--),
-              icon: const Icon(
-                Icons.skip_previous_outlined,
-                semanticLabel: 'Previous line',
-              ),
-            ),
-            IconButton(
-              onPressed: () => speak(line),
-              icon: const Icon(
-                Icons.play_circle_outline,
-                semanticLabel: 'Replay',
-              ),
-            ),
-            IconButton(
-              autofocus: true,
-              onPressed: index >= (widget.lines.length - 1)
-                  ? null
-                  : () => setState(() => index++),
-              icon: const Icon(
-                Icons.skip_next_outlined,
-                semanticLabel: 'Next line',
-              ),
-            ),
-          ];
-          final textWidget = AutoSizeText(
-            line,
-            style: const TextStyle(
-              fontSize: 20.0,
-            ),
-            overflow: TextOverflow.visible,
-          );
           switch (orientation) {
             case Orientation.portrait:
               return Column(
@@ -119,5 +158,12 @@ class ScriptScreenState extends State<ScriptScreen> {
         },
       ),
     );
+  }
+
+  /// Load preferences.
+  Future<void> loadPreferences() async {
+    final preferences = await SharedPreferences.getInstance();
+    _automaticallyRead = preferences.getBool(automaticallyReadKey) ?? true;
+    setState(() {});
   }
 }
