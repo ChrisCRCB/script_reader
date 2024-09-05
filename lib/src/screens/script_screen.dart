@@ -2,8 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:backstreets_widgets/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:shared_preferences/shared_preferences.dart'
-    hide SharedPreferences;
 
 /// The key for the automatically read preference.
 const automaticallyReadKey = 'script_reader_automatically_read';
@@ -30,17 +28,8 @@ class ScriptScreen extends StatefulWidget {
 
 /// State for [ScriptScreen].
 class ScriptScreenState extends State<ScriptScreen> {
-  /// The preferences to load and save to.
-  SharedPreferencesWithCache? _preferences;
-
   /// Whether new lines should automatically be read.
-  bool? _automaticallyRead;
-
-  /// Any error which has been shown.
-  Object? _exception;
-
-  /// Any stack trace which has been created.
-  StackTrace? _stackTrace;
+  late bool automaticallyRead;
 
   /// The TTS to use.
   late final FlutterTts tts;
@@ -52,9 +41,7 @@ class ScriptScreenState extends State<ScriptScreen> {
   @override
   void initState() {
     super.initState();
-    SharedPreferencesWithCache.create(
-      cacheOptions: const SharedPreferencesWithCacheOptions(),
-    ).then((final options) => setState(() => _preferences = options));
+    automaticallyRead = true;
     tts = FlutterTts();
     index = 0;
   }
@@ -75,20 +62,8 @@ class ScriptScreenState extends State<ScriptScreen> {
   /// Build a widget.
   @override
   Widget build(final BuildContext context) {
-    final automaticallyRead = _automaticallyRead;
-    if (automaticallyRead == null) {
-      loadPreferences();
-      return const LoadingScreen();
-    }
-    final e = _exception;
-    if (e != null) {
-      return ErrorScreen(
-        error: e,
-        stackTrace: _stackTrace,
-      );
-    }
     final line = widget.lines[index];
-    if (automaticallyRead == true) {
+    if (automaticallyRead) {
       speak(line);
     } else {
       tts.stop();
@@ -129,23 +104,18 @@ class ScriptScreenState extends State<ScriptScreen> {
         overflow: TextOverflow.visible,
       ),
     );
-    final automaticallyReadLabel = automaticallyRead == true
-        ? 'Disable automatic reading'
-        : 'Enable automatic reading';
+    const automaticallyReadLabel = 'Automatically read';
     return SimpleScaffold(
       actions: [
         Row(
           children: [
-            Text(automaticallyReadLabel),
+            const Text(automaticallyReadLabel),
             Checkbox(
               value: automaticallyRead,
-              onChanged: (final value) async {
-                _automaticallyRead = value ?? false;
-                await _preferences?.setBool(
-                  automaticallyReadKey,
-                  value ?? false,
-                );
-                setState(() {});
+              onChanged: (final value) {
+                setState(() {
+                  automaticallyRead = value ?? false;
+                });
               },
               semanticLabel: automaticallyReadLabel,
             ),
@@ -180,18 +150,5 @@ class ScriptScreenState extends State<ScriptScreen> {
         },
       ),
     );
-  }
-
-  /// Load preferences.
-  Future<void> loadPreferences() async {
-    try {
-      _automaticallyRead = _preferences?.getBool(automaticallyReadKey) ?? true;
-      // ignore: avoid_catches_without_on_clauses
-    } catch (e, s) {
-      _exception = e;
-      _stackTrace = s;
-    } finally {
-      setState(() {});
-    }
   }
 }
