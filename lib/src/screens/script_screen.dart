@@ -2,7 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:backstreets_widgets/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart'
+    hide SharedPreferences;
 
 /// The key for the automatically read preference.
 const automaticallyReadKey = 'script_reader_automatically_read';
@@ -29,8 +30,17 @@ class ScriptScreen extends StatefulWidget {
 
 /// State for [ScriptScreen].
 class ScriptScreenState extends State<ScriptScreen> {
+  /// The preferences to load and save to.
+  late final SharedPreferencesAsync preferences;
+
   /// Whether new lines should automatically be read.
   bool? _automaticallyRead;
+
+  /// Any error which has been shown.
+  Object? _exception;
+
+  /// Any stack trace which has been created.
+  StackTrace? _stackTrace;
 
   /// The TTS to use.
   late final FlutterTts tts;
@@ -42,6 +52,7 @@ class ScriptScreenState extends State<ScriptScreen> {
   @override
   void initState() {
     super.initState();
+    preferences = SharedPreferencesAsync();
     tts = FlutterTts();
     index = 0;
   }
@@ -66,6 +77,13 @@ class ScriptScreenState extends State<ScriptScreen> {
     if (automaticallyRead == null) {
       loadPreferences();
       return const LoadingScreen();
+    }
+    final e = _exception;
+    if (e != null) {
+      return ErrorScreen(
+        error: e,
+        stackTrace: _stackTrace,
+      );
     }
     final line = widget.lines[index];
     if (automaticallyRead == true) {
@@ -121,7 +139,6 @@ class ScriptScreenState extends State<ScriptScreen> {
               value: automaticallyRead,
               onChanged: (final value) async {
                 _automaticallyRead = value ?? false;
-                final preferences = await SharedPreferences.getInstance();
                 await preferences.setBool(automaticallyReadKey, value ?? false);
                 setState(() {});
               },
@@ -162,8 +179,15 @@ class ScriptScreenState extends State<ScriptScreen> {
 
   /// Load preferences.
   Future<void> loadPreferences() async {
-    final preferences = await SharedPreferences.getInstance();
-    _automaticallyRead = preferences.getBool(automaticallyReadKey) ?? true;
-    setState(() {});
+    try {
+      _automaticallyRead =
+          await preferences.getBool(automaticallyReadKey) ?? true;
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e, s) {
+      _exception = e;
+      _stackTrace = s;
+    } finally {
+      setState(() {});
+    }
   }
 }
