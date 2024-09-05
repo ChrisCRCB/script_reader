@@ -31,7 +31,7 @@ class ScriptScreen extends StatefulWidget {
 /// State for [ScriptScreen].
 class ScriptScreenState extends State<ScriptScreen> {
   /// The preferences to load and save to.
-  late final SharedPreferencesAsync preferences;
+  SharedPreferencesWithCache? _preferences;
 
   /// Whether new lines should automatically be read.
   bool? _automaticallyRead;
@@ -52,7 +52,9 @@ class ScriptScreenState extends State<ScriptScreen> {
   @override
   void initState() {
     super.initState();
-    preferences = SharedPreferencesAsync();
+    SharedPreferencesWithCache.create(
+      cacheOptions: const SharedPreferencesWithCacheOptions(),
+    ).then((final options) => setState(() => _preferences = options));
     tts = FlutterTts();
     index = 0;
   }
@@ -139,7 +141,10 @@ class ScriptScreenState extends State<ScriptScreen> {
               value: automaticallyRead,
               onChanged: (final value) async {
                 _automaticallyRead = value ?? false;
-                await preferences.setBool(automaticallyReadKey, value ?? false);
+                await _preferences?.setBool(
+                  automaticallyReadKey,
+                  value ?? false,
+                );
                 setState(() {});
               },
               semanticLabel: automaticallyReadLabel,
@@ -180,8 +185,7 @@ class ScriptScreenState extends State<ScriptScreen> {
   /// Load preferences.
   Future<void> loadPreferences() async {
     try {
-      _automaticallyRead =
-          await preferences.getBool(automaticallyReadKey) ?? true;
+      _automaticallyRead = _preferences?.getBool(automaticallyReadKey) ?? true;
       // ignore: avoid_catches_without_on_clauses
     } catch (e, s) {
       _exception = e;
